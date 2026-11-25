@@ -8,6 +8,7 @@
 (function(){var r=document.documentElement;r.setAttribute("data-host-theme",r.getAttribute("data-theme")||"");
 try{var t=localStorage.getItem("dh-theme");if(t==="light"||t==="dark"){r.setAttribute("data-theme",t);}}catch(e){}})();
 </script>
+<link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&display=swap" rel="stylesheet">
@@ -16,7 +17,7 @@ try{var t=localStorage.getItem("dh-theme");if(t==="light"||t==="dark"){r.setAttr
 <body>
 <header class="topbar">
  <button type="button" class="menu-btn" id="menu-btn" aria-controls="sidebar" aria-expanded="false" aria-label="Mục lục"><svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true"><path d="M1 1h16M1 7h16M1 13h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
- <a class="brand" href="#trang-chu">dev-handbook</a>
+ <a class="brand" href="#trang-chu"><img src="assets/logo-mark.svg" alt="" width="24" height="24">dev-handbook</a>
  <span class="ver" id="ver"></span>
  <div class="theme" role="group" aria-label="Giao diện">
   <button type="button" id="th-light">Sáng</button><button type="button" id="th-dark">Tối</button><button type="button" id="th-auto">Tự động</button>

@@ -11,6 +11,10 @@ owner: "(điền tên)"
 
 # Nhật ký thay đổi
 
+## 1.5 · 25/11/2026
+
+- Thêm logo (biểu tượng và logo có chữ, sáng và tối), vẽ bằng `scripts/make_logo.py`. Dùng làm favicon và trên thanh đầu trang web.
+
 ## 1.4 · 25/11/2026
 
 - README có hình bản đồ luồng "Đặt hàng" (sáng, tối) và 5 sơ đồ: hệ thống, luồng theo module, lộ trình học, roadmap, cách tìm trang.
