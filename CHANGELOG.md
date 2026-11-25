@@ -11,6 +11,11 @@ owner: "(điền tên)"
 
 # Nhật ký thay đổi
 
+## 1.4 · 25/11/2026
+
+- README có hình bản đồ luồng "Đặt hàng" (sáng, tối) và 5 sơ đồ: hệ thống, luồng theo module, lộ trình học, roadmap, cách tìm trang.
+- Đăng trang online bằng GitHub Pages qua GitHub Actions.
+
 ## 1.3 · 25/11/2026
 
 - Viết bản nháp đủ 10 mục cho Module Catalog và Module Auth.

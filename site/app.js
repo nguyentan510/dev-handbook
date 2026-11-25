@@ -25,7 +25,7 @@ function applyTheme(t, rerender){
   else root.setAttribute("data-theme", t);
   try { localStorage.setItem("dh-theme", t); } catch(e) {}
   ["light","dark","auto"].forEach(k => $("th-"+k).setAttribute("aria-pressed", k === t ? "true" : "false"));
-  if (rerender) renderMermaid();
+  if (rerender) { renderMermaid(); swapPictures(); }
 }
 ["light","dark","auto"].forEach(k => $("th-"+k).addEventListener("click", () => applyTheme(k, true)));
 applyTheme(savedTheme(), false);
@@ -103,11 +103,22 @@ function render(){
     if (k === "glossary") glossary(w);
     if (k === "criteria") criteria(w);
   });
+  swapPictures();
   renderMermaid();
   markNav();
   setNav(false);
 }
 window.addEventListener("hashchange", () => { render(); window.scrollTo(0, 0); });
+
+/* ---------- pictures: follow the chosen theme ---------- */
+function swapPictures(){
+  document.querySelectorAll("#doc picture").forEach(pic => {
+    const img = pic.querySelector("img");
+    if (!img) return;
+    pic.querySelectorAll("source").forEach(s => s.remove());
+    img.src = img.getAttribute("src").replace(/-(light|dark)\.svg$/, isDark() ? "-dark.svg" : "-light.svg");
+  });
+}
 
 /* ---------- code: copy + mermaid ---------- */
 function codeBlocks(doc){

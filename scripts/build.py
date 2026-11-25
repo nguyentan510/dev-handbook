@@ -8,7 +8,7 @@ Kết quả:           site/content.js (mở site/index.html để xem)
 Script cũng kiểm tra: frontmatter đủ trường, id không trùng, link .md không hỏng,
 mọi file đều có trong menu, trang nào đã quá ngày review_by.
 """
-import datetime, json, os, posixpath, re, sys
+import datetime, json, os, posixpath, re, shutil, sys
 import markdown
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -41,7 +41,7 @@ REQUIRED = ["id", "title", "type", "level", "status", "updated", "review_by", "o
 
 def read_page(path):
     text = open(os.path.join(ROOT, path), encoding="utf-8").read()
-    m = re.match(r"^---\n(.*?)\n---\n", text, re.S)
+    m = re.match(r"^(?:<!--\n)?---\n(.*?)\n---\n(?:-->\n)?", text, re.S)
     if not m:
         raise SystemExit(f"Thiếu frontmatter: {path}")
     meta = {}
@@ -61,7 +61,7 @@ def main():
     all_md = sorted(
         posixpath.relpath(os.path.join(d, f), ROOT).replace(os.sep, "/")
         for d, _, fs in os.walk(ROOT) for f in fs
-        if f.endswith(".md") and "/site" not in d and "/scripts" not in d)
+        if f.endswith(".md") and "/site" not in d and "/scripts" not in d and "/.git" not in d)
     problems = []
     for p in all_md:
         if p not in nav_paths:
@@ -101,6 +101,10 @@ def main():
     data = {"built": today, "nav": [{"group": g, "items": [id_of[p] for p in ps]} for g, ps in NAV], "pages": out}
     js = "window.HANDBOOK=" + json.dumps(data, ensure_ascii=False).replace("</", "<\\/") + ";\n"
     open(os.path.join(ROOT, "site", "content.js"), "w", encoding="utf-8").write(js)
+    src_assets, dst_assets = os.path.join(ROOT, "assets"), os.path.join(ROOT, "site", "assets")
+    if os.path.isdir(src_assets):
+        shutil.rmtree(dst_assets, ignore_errors=True)
+        shutil.copytree(src_assets, dst_assets)
     print(f"Đã dựng {len(out)} trang vào site/content.js")
     for x in problems:
         print("  !", x)
