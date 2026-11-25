@@ -11,6 +11,11 @@ owner: "(điền tên)"
 
 # Nhật ký thay đổi
 
+## 1.6 · 25/11/2026
+
+- Bảng thuật ngữ thêm 49 mục hay dùng khi triển khai dự án (146 mục), thêm hai nhóm: Khởi tạo và công cụ, Git và cộng tác.
+- Thêm trang giải thích starter, scaffold, skeleton và walking skeleton.
+
 ## 1.5 · 25/11/2026
 
 - Thêm logo (biểu tượng và logo có chữ, sáng và tối), vẽ bằng `scripts/make_logo.py`. Dùng làm favicon và trên thanh đầu trang web.

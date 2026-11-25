@@ -163,7 +163,7 @@ Mỗi trang chỉ thuộc một loại, theo cách chia của Diátaxis. Trộn 
 
 | | |
 |---|---|
-| Phiên bản | 1.5 ([nhật ký thay đổi](CHANGELOG.md)) |
+| Phiên bản | 1.6 ([nhật ký thay đổi](CHANGELOG.md)) |
 | Người đọc | Người mới, junior, người vibe code, dev chuyển sang fullstack |
 | Case study | App bán hàng online của một shop quà tặng (ví dụ) |
 | Cách đóng góp | [Cách viết và bảo trì tài liệu](CONTRIBUTING.md) |

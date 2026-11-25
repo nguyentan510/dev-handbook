@@ -37,6 +37,15 @@ Nguồn chuẩn duy nhất cho thuật ngữ của dự án. Trang khác dùng �
 | **State** | Trạng thái | Cấu trúc | Dữ liệu ứng dụng đang giữ lúc chạy. | Số món trong giỏ. |
 | **Dependency direction** | Chiều phụ thuộc | Cấu trúc | Phần nào được phép gọi, biết đến phần nào. Quy tắc nghiệp vụ không nên phụ thuộc chi tiết kỹ thuật. | Service không biết đang dùng PostgreSQL hay MySQL. |
 | **Ports and adapters** | Hexagonal, clean architecture | Cấu trúc | Kiểu kiến trúc mà lõi nghiệp vụ định nghĩa giao diện nó cần, còn database và dịch vụ ngoài là adapter cắm vào. | Đổi cổng thanh toán chỉ cần viết adapter mới. |
+| **Contract** | API contract, hợp đồng API | Cấu trúc | Thỏa thuận cố định giữa hai bên về request, response và lỗi. Mỗi bên làm độc lập, miễn là đúng contract. | POST /orders trả 201 kèm id, status, total. |
+| **OpenAPI** | Swagger | Cấu trúc | Chuẩn mô tả contract của REST API bằng file YAML hoặc JSON, từ đó sinh tài liệu, code mẫu và test. | File openapi.yaml mô tả mọi endpoint của shop. |
+| **Payload** | Thân dữ liệu | Cấu trúc | Phần dữ liệu chính trong request, response hoặc sự kiện, không tính header. | JSON trong body của POST /orders. |
+| **Pagination** | Phân trang | Cấu trúc | Chia danh sách dài thành nhiều trang. Phân trang bằng cursor ổn định hơn bằng offset khi có dữ liệu mới chen vào. | GET /orders?cursor=... |
+| **API versioning** | Phiên bản API | Cấu trúc | Đánh số phiên bản API để đổi contract mà không làm hỏng client cũ. | /api/v1 chạy song song với /api/v2. |
+| **ORM** | Object-Relational Mapping | Cấu trúc | Thư viện ánh xạ bảng trong database thành đối tượng trong code, đỡ phải viết SQL tay. | Order.findById(id) thay cho câu SELECT. |
+| **Index** | Chỉ mục | Cấu trúc | Cấu trúc giúp database tìm nhanh theo cột. Nhiều chỉ mục làm thao tác ghi chậm hơn. | Chỉ mục (user_id, created_at) cho trang đơn của tôi. |
+| **Cache** | Bộ nhớ đệm | Cấu trúc | Lưu tạm kết quả để lần sau trả nhanh. Phải biết dữ liệu được phép cũ bao lâu. | Cache danh sách sản phẩm 60 giây. |
+| **Queue** | Hàng đợi | Cấu trúc | Nơi xếp việc để worker xử lý dần, tách việc chậm khỏi request của người dùng. | Hàng đợi gửi email xác nhận. |
 | **Layer** | Tầng | Tổ chức | Lớp kỹ thuật theo chiều ngang: code nằm ở đâu. | UI, API, Service, Repository. |
 | **Module** | Phân hệ | Tổ chức | Nhóm chức năng theo chiều dọc, cắt qua mọi layer. | Order, Payment. |
 | **Feature** | Tính năng | Tổ chức | Một khả năng người dùng thấy được, thường nằm trong một module. | Áp voucher thuộc Order. |
@@ -74,6 +83,9 @@ Nguồn chuẩn duy nhất cho thuật ngữ của dự án. Trang khác dùng �
 | **Spike** | Thử nghiệm ngắn | Loại việc | Việc thử 1-2 ngày để giảm bất định. | Chạy thử sandbox cổng thanh toán. |
 | **Integration** | Tích hợp | Loại việc | Nối ứng dụng với dịch vụ bên ngoài. | Cổng thanh toán, dịch vụ email. |
 | **Threat model** | Mô hình mối đe dọa | Loại việc | Liệt kê ai có thể tấn công, tấn công vào đâu và cách chặn. Làm từ đầu dự án. | Người lạ đoán mã đơn để xem đơn người khác. |
+| **Smoke test** |  | Loại việc | Bộ test ít và nhanh, kiểm các chức năng chính còn chạy ngay sau khi deploy. | Mở trang chủ, tạo một đơn thử trên staging. |
+| **Regression test** | Test hồi quy | Loại việc | Test để chắc thay đổi mới không làm hỏng thứ đang chạy đúng. | Chạy lại toàn bộ test tính tiền sau khi thêm voucher. |
+| **Code generation** | Sinh code | Loại việc | Dùng công cụ hoặc AI sinh code từ mẫu hay từ mô tả. | Sinh client API từ file OpenAPI. |
 | **Roadmap** | Lộ trình | Kế hoạch | Các giai đoạn theo thời gian, làm gì trước, làm gì sau. | Roadmap 8 tuần ở trên. |
 | **Phase** | Giai đoạn | Kế hoạch | Khoảng thời gian có mục tiêu và kết quả riêng. | P2 Payment. |
 | **Milestone** | Mốc | Kế hoạch | Điểm kiểm tra: tới đây phải có thứ hoàn thành. | Cuối tuần 3 đặt được đơn. |
@@ -89,6 +101,14 @@ Nguồn chuẩn duy nhất cho thuật ngữ của dự án. Trang khác dùng �
 | **Owner** | Người chịu trách nhiệm | Kế hoạch | Một người cụ thể chịu trách nhiệm kết quả. Khác với việc ai hay AI viết code. | Backend lead phụ trách webhook. |
 | **ADR** | Architecture Decision Record | Kế hoạch | Ghi chép một quyết định kiến trúc: bối cảnh, lựa chọn, lý do. | Vì sao chọn monolith. |
 | **Sprint** |  | Kế hoạch | Chu kỳ làm việc 1-2 tuần, kết thúc bằng kết quả xem được. | Mỗi sprint một lát cắt. |
+| **PoC** | Proof of Concept | Kế hoạch | Bản thử để chứng minh một ý tưởng kỹ thuật làm được. Thường bỏ đi sau khi có câu trả lời. | Script nhỏ gọi thử cổng thanh toán. |
+| **Prototype** | Bản mẫu | Kế hoạch | Bản dựng nhanh để xem và thử trải nghiệm, chưa đủ chất lượng để chạy thật. | Màn hình đặt hàng bấm được nhưng dữ liệu giả. |
+| **Tech debt** | Nợ kỹ thuật | Kế hoạch | Đường tắt hôm nay làm thay đổi sau này tốn công hơn. Cần ghi lại và trả dần. | Tạm bỏ phân trang để kịp demo, ghi vào backlog. |
+| **Kickoff** | Họp khởi động | Kế hoạch | Buổi đầu dự án để thống nhất mục tiêu, phạm vi, vai trò và cách làm việc. | Kickoff trước khi bắt đầu P0. |
+| **Estimate** | Ước lượng | Kế hoạch | Dự đoán công sức cho một việc, nên kèm mức độ chắc chắn. | 3 ngày, có thể 5 nếu cổng thanh toán duyệt chậm. |
+| **Code freeze** | Đóng băng code | Kế hoạch | Giai đoạn ngừng thêm tính năng, chỉ sửa lỗi trước khi phát hành. | Tuần 7 chỉ sửa lỗi. |
+| **UAT** | User Acceptance Testing | Kế hoạch | Người dùng hoặc khách hàng thử và xác nhận đúng yêu cầu trước khi phát hành. | Chủ shop tự đặt vài đơn trên staging. |
+| **Handover** | Bàn giao | Kế hoạch | Chuyển hệ thống, tài liệu và quyền truy cập cho người tiếp quản. | Bàn giao kèm runbook và danh sách secret cần xoay vòng. |
 | **CI/CD** |  | Vận hành | Tự chạy test khi có code mới (CI) và tự đưa code lên môi trường (CD). | Đẩy code thì test chạy, qua thì deploy staging. |
 | **Environment** | Môi trường | Vận hành | Nơi ứng dụng chạy, mỗi nơi có cấu hình riêng. | dev, staging, production. |
 | **Staging** | Môi trường thử | Vận hành | Bản giống production để kiểm tra trước khi phát hành. | Test thanh toán bằng sandbox. |
@@ -106,6 +126,35 @@ Nguồn chuẩn duy nhất cho thuật ngữ của dự án. Trang khác dùng �
 | **Xác thực và phân quyền** | Authentication, authorization | Vận hành | Xác thực: bạn là ai. Phân quyền: bạn được làm gì. | Đăng nhập đúng nhưng chỉ xem được đơn của mình. |
 | **PII** | Thông tin cá nhân | Vận hành | Dữ liệu nhận diện được một người, cần bảo vệ và hạn chế ghi log. | Email, số điện thoại, địa chỉ. |
 | **Accessibility** | a11y, khả năng tiếp cận | Vận hành | Thiết kế để mọi người dùng được, kể cả người dùng bàn phím hoặc trình đọc màn hình. | Nút có nhãn rõ, đủ độ tương phản. |
+| **Release** | Bản phát hành | Vận hành | Một phiên bản được đưa tới người dùng, có số phiên bản và ghi chú thay đổi. | Release 1.0 kèm release notes. |
+| **Semantic versioning** | SemVer | Vận hành | Đánh số MAJOR.MINOR.PATCH: thay đổi phá vỡ tăng MAJOR, thêm tính năng tăng MINOR, sửa lỗi tăng PATCH. | 1.4.2 lên 1.5.0 khi thêm voucher. |
+| **Hotfix** | Sửa nóng | Vận hành | Bản sửa lỗi gấp đưa thẳng lên production ngoài lịch phát hành. | Sửa lỗi tính sai phí ship ngay trong ngày. |
+| **Feature flag** | Cờ tính năng | Vận hành | Công tắc bật hoặc tắt một tính năng mà không cần deploy lại. | Bật voucher cho 10% khách trước. |
+| **Canary release** | Phát hành dần | Vận hành | Đưa bản mới tới một phần nhỏ người dùng, theo dõi rồi mới mở rộng. | 5% lưu lượng dùng bản mới trong 1 giờ. |
+| **Health check** | Kiểm tra sức khỏe | Vận hành | Endpoint báo ứng dụng còn chạy và kết nối được với các phụ thuộc. | GET /health trả 200 khi kết nối được database. |
+| **Timeout** | Thời gian chờ tối đa | Vận hành | Giới hạn thời gian đợi một lời gọi trước khi coi là lỗi. | Gọi cổng thanh toán chờ tối đa 10 giây. |
+| **Retry / Backoff** | Thử lại có giãn cách | Vận hành | Gọi lại khi gặp lỗi tạm thời, mỗi lần chờ lâu hơn lần trước để không dồn tải. | Thử gửi email lại sau 1, 2, 4 phút. |
+| **Starter** | Starter kit, template | Khởi tạo và công cụ | Dự án mẫu dựng sẵn cấu trúc, thư viện và cấu hình. Sao chép một lần rồi phát triển tiếp trên đó. | Starter chính thức của framework có sẵn TypeScript và lint. |
+| **Scaffold** | Scaffolding, sinh khung | Khởi tạo và công cụ | Lệnh hoặc công cụ tự sinh file và thư mục theo mẫu, cho cả dự án hay cho một phần. Có thể chạy nhiều lần. | Lệnh sinh model, controller, migration cho Product. |
+| **Skeleton** | Bộ khung | Khởi tạo và công cụ | Cấu trúc tối thiểu có đủ chỗ cho từng phần nhưng gần như chưa có logic. | Thư mục controller, service, repository rỗng kèm một route mẫu. |
+| **Walking skeleton** | Bộ khung chạy được | Khởi tạo và công cụ | Phiên bản nhỏ nhất chạy xuyên mọi layer và đã deploy được, làm trước khi thêm tính năng thật. | Endpoint /health đi qua API và database, deploy lên staging ở P0. |
+| **Monorepo** |  | Khởi tạo và công cụ | Nhiều ứng dụng hoặc package nằm chung một repo, dùng chung công cụ và quy ước. | Thư mục web, api, shared trong cùng một repo. |
+| **Package manager** | Trình quản lý gói | Khởi tạo và công cụ | Công cụ cài và quản lý các thư viện mà dự án phụ thuộc. | npm, pnpm, pip. |
+| **Lock file** |  | Khởi tạo và công cụ | File chốt chính xác phiên bản mọi thư viện để máy nào cài cũng giống nhau. Phải commit. | package-lock.json, poetry.lock. |
+| **Environment variable** | Biến môi trường, .env | Khởi tạo và công cụ | Giá trị cấu hình nằm ngoài code, khác nhau theo môi trường. File .env chứa giá trị thật không được commit. | DATABASE_URL, PAYMENT_SECRET. |
+| **Linter** |  | Khởi tạo và công cụ | Công cụ bắt lỗi và vi phạm quy ước trong code trước khi chạy. | ESLint, Ruff. |
+| **Formatter** |  | Khởi tạo và công cụ | Công cụ tự định dạng code để cả nhóm viết giống nhau. | Prettier, Black. |
+| **Seed data** | Dữ liệu mẫu | Khởi tạo và công cụ | Dữ liệu tạo sẵn để chạy thử trên máy dev hoặc staging. | 50 sản phẩm và 3 voucher mẫu. |
+| **Fixture** |  | Khởi tạo và công cụ | Dữ liệu hoặc trạng thái cố định được chuẩn bị cho test. | Một đơn pending_payment dùng chung cho nhiều test. |
+| **Mock / Stub / Fake** | Đối tượng giả | Khởi tạo và công cụ | Thay một phần thật bằng phần giả khi test. Stub trả kết quả cố định, mock kiểm được nó bị gọi thế nào, fake là bản thật thu gọn. | Cổng thanh toán giả luôn trả thành công. |
+| **Container** | Docker | Khởi tạo và công cụ | Đóng gói ứng dụng cùng môi trường chạy, để chạy giống nhau ở mọi máy. | Cùng một image backend chạy ở máy dev và production. |
+| **Repo (Git)** | Kho mã | Git và cộng tác | Nơi lưu code và toàn bộ lịch sử thay đổi. Khác với Repository là layer truy cập dữ liệu. | github.com/nguyentan510/dev-handbook. |
+| **Branch** | Nhánh | Git và cộng tác | Dòng phát triển riêng để làm một việc mà không ảnh hưởng nhánh chính. | feat/order-voucher. |
+| **Pull request** | PR, merge request | Git và cộng tác | Đề nghị gộp một nhánh vào nhánh chính, là nơi review code và chạy CI. | PR thêm voucher cần một người duyệt. |
+| **Merge / Rebase** | Gộp nhánh | Git và cộng tác | Merge gộp hai nhánh bằng một commit gộp. Rebase đặt lại các commit của bạn lên trên nhánh mới nhất. | Rebase nhánh voucher lên main trước khi mở PR. |
+| **Merge conflict** | Xung đột khi gộp | Git và cộng tác | Hai nhánh cùng sửa một chỗ nên Git không tự gộp được, phải có người chọn. | Hai người cùng sửa hàm tính tiền. |
+| **Code owner** | Người sở hữu code | Git và cộng tác | Người hoặc nhóm bắt buộc phải duyệt khi có thay đổi ở một vùng code. | Mọi thay đổi trong thư mục payments cần tech lead duyệt. |
+| **Conventional Commits** |  | Git và cộng tác | Quy ước viết commit có loại và phạm vi, dễ đọc và sinh được changelog tự động. | feat(order): áp voucher khi đặt hàng. |
 | **Prompt** | Câu lệnh | Làm với AI | Yêu cầu viết cho AI. Càng cụ thể kết quả càng sát. | Tạo POST /orders theo contract trong docs/api. |
 | **Context** | Ngữ cảnh | Làm với AI | Thông tin AI đang thấy: file, quy ước, yêu cầu. | Cho AI đọc AGENTS.md trước. |
 | **AGENTS.md** | File ngữ cảnh | Làm với AI | File ở gốc dự án mô tả kiến trúc, lệnh, quy ước và điều cấm cho AI. | Mẫu ở phần Làm việc với AI. |
@@ -114,5 +163,7 @@ Nguồn chuẩn duy nhất cho thuật ngữ của dự án. Trang khác dùng �
 | **Code review** |  | Làm với AI | Đọc và kiểm tra code trước khi chấp nhận, kể cả code AI viết. | Dùng checklist review. |
 | **Diff** |  | Làm với AI | Phần thay đổi so với phiên bản trước. | Xem AI sửa những dòng nào. |
 | **Commit** |  | Làm với AI | Lưu một mốc thay đổi vào Git. | Commit sau mỗi task nhỏ. |
+
+Starter, scaffold và skeleton dễ bị dùng lẫn: xem [Khởi tạo dự án](../04-explanation/khoi-tao-du-an.md).
 
 Thiếu một thuật ngữ? Thêm một dòng vào bảng này theo [cách viết tài liệu](../CONTRIBUTING.md).

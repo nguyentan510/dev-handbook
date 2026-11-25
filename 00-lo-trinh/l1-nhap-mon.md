@@ -30,6 +30,7 @@ owner: "(điền tên)"
 7. [Lập roadmap MVP](../02-how-to/lap-roadmap-mvp.md)
 8. [8 tiêu chí của một kế hoạch bài bản](../03-reference/tieu-chi-ke-hoach.md)
 9. [Giao việc cho AI theo mức rủi ro](../02-how-to/giao-viec-cho-ai.md)
+10. [Starter, scaffold, skeleton: khởi tạo dự án](../04-explanation/khoi-tao-du-an.md)
 
 Tra cứu khi cần: [Thuật ngữ](../03-reference/thuat-ngu.md), [Mô hình dữ liệu](../03-reference/mo-hinh-du-lieu.md), [API đặt hàng](../03-reference/api-dat-hang.md), [Trạng thái đơn và thanh toán](../03-reference/trang-thai.md).
 
